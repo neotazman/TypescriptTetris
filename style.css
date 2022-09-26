@@ -1,0 +1,22 @@
+* {
+    outline: 1px solid crimson;
+    box-sizing: border-box;
+}
+
+.col {
+    background-color: yellowgreen
+}
+
+#gameBoard {
+    background-color: black;
+}
+
+.cell {
+    background-color: yellowgreen;
+    height: 24px;
+    width: 24px;
+}
+
+.filled {
+    background-color: maroon
+}
