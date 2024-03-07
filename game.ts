@@ -56,8 +56,12 @@ const StartingGameModel : GameState = {  // where the game state is stored
 
 class GameModel {
     gamestate: GameState;
-    constructor(gameState?: GameState, x: number, y: number) {
-        this.gamestate = gameState ||  //StartingGameModel
+    constructor(gameState?: GameState) {
+        this.gamestate = gameState || StartingGameModel
+    }
+    newGameBoard(x: number, y: number): void {
+        theBoard.innerHTML = ''
+
     }
     buildGameBoard(): void {// rebuilds the game board with the current gamestate
         theBoard.innerHTML = '' // clear the board
@@ -79,11 +83,6 @@ class GameModel {
         document.body.append(theBoard)
 
     }
-}
-
-
-
-const buildGameBoard = () : void => { 
 }
 
 function findStartingPosition(piece: Tetromino) : CellPosition {
@@ -109,4 +108,6 @@ class gamePiece {
     }
 }
 
-buildGameBoard()
+let GameBoard = new GameModel()
+
+GameBoard.buildGameBoard()

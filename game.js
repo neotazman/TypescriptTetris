@@ -35,9 +35,11 @@ const StartingGameModel = {
     score: 0,
 };
 class GameModel {
-    constructor(gameState, x, y) {
-        this.gamestate = gameState ||
-        ; //StartingGameModel
+    constructor(gameState) {
+        this.gamestate = gameState || StartingGameModel;
+    }
+    newGameBoard(x, y) {
+        theBoard.innerHTML = '';
     }
     buildGameBoard() {
         theBoard.innerHTML = ''; // clear the board
@@ -59,8 +61,6 @@ class GameModel {
         document.body.append(theBoard);
     }
 }
-const buildGameBoard = () => {
-};
 function findStartingPosition(piece) {
     let result;
     for (let i = 0; i < piece.length; i++) {
@@ -81,4 +81,5 @@ class gamePiece {
     draw() {
     }
 }
-buildGameBoard();
+let GameBoard = new GameModel();
+GameBoard.buildGameBoard();
