@@ -4,8 +4,8 @@ const theBoard = document.createElement('table')
 theBoard.id = 'gameBoard'
 
 ///// custom types. primarily for values and/or parameters
-type CellValue = 0 | 1 // CHANGE THIS WHEN TETROMINOS ARE CREATED this is just to show that the cells are either filled or empty
-type BoardRect = CellValue[][] // not a cell but a square of any number of cells
+type CellValue = 0 | 1 | 2// CHANGE THIS WHEN TETROMINOS ARE CREATED this is just to show that the cells are either filled or empty
+type BoardRect = number[][] // not a cell but a square of any number of cells
 type Tetromino = [ // the rectangle that the game piece can take up
     [CellValue, CellValue, CellValue, CellValue],
     [CellValue, CellValue, CellValue, CellValue],
@@ -55,18 +55,26 @@ const StartingGameModel : GameState = {  // where the game state is stored
 }
 
 class GameModel {
-    gamestate: GameState;
-    constructor(gameState?: GameState) {
-        this.gamestate = gameState || StartingGameModel
+    gameState: GameState;
+    constructor(gamestate?: GameState) {
+        this.gameState = gamestate || StartingGameModel
     }
     newGameBoard(x: number, y: number): void {
         theBoard.innerHTML = ''
-
+        this.gameState.gameBoard = []
+        for(let i = 0; i < y; i++) {
+            let currentLine = []
+            for(let j = 0; j < x; j++) {
+                currentLine.push(0)
+            }
+            this.gameState.gameBoard.push(currentLine)
+        }
+        console.table(this.gameState.gameBoard)
     }
     buildGameBoard(): void {// rebuilds the game board with the current gamestate
         theBoard.innerHTML = '' // clear the board
-        for(let row = 0; row < StartingGameModel.gameBoard.length; row++) { // makes the board match the game model
-            let currentRow = StartingGameModel.gameBoard[row]
+        for(let row = 0; row < this.gameState.gameBoard.length; row++) { // makes the board match the game model
+            let currentRow = this.gameState.gameBoard[row]
             let thisRow = document.createElement('tr')
             thisRow.className = `row ${row}`
             for(let col = 0; col < currentRow.length; col++) {
@@ -81,7 +89,6 @@ class GameModel {
             theBoard.append(thisRow)
         }
         document.body.append(theBoard)
-
     }
 }
 
@@ -98,7 +105,7 @@ function findStartingPosition(piece: Tetromino) : CellPosition {
 
 class gamePiece {
     velocity: number
-    startingPosition: [number, number]
+    startingPosition: CellPosition // [number, number]
     constructor(square: Tetromino) {
         this.velocity = 1 
         this.startingPosition = findStartingPosition(square)

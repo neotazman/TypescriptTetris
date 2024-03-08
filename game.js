@@ -35,16 +35,25 @@ const StartingGameModel = {
     score: 0,
 };
 class GameModel {
-    constructor(gameState) {
-        this.gamestate = gameState || StartingGameModel;
+    constructor(gamestate) {
+        this.gameState = gamestate || StartingGameModel;
     }
     newGameBoard(x, y) {
         theBoard.innerHTML = '';
+        this.gameState.gameBoard = [];
+        for (let i = 0; i < y; i++) {
+            let currentLine = [];
+            for (let j = 0; j < x; j++) {
+                currentLine.push(0);
+            }
+            this.gameState.gameBoard.push(currentLine);
+        }
+        console.table(this.gameState.gameBoard);
     }
     buildGameBoard() {
         theBoard.innerHTML = ''; // clear the board
-        for (let row = 0; row < StartingGameModel.gameBoard.length; row++) { // makes the board match the game model
-            let currentRow = StartingGameModel.gameBoard[row];
+        for (let row = 0; row < this.gameState.gameBoard.length; row++) { // makes the board match the game model
+            let currentRow = this.gameState.gameBoard[row];
             let thisRow = document.createElement('tr');
             thisRow.className = `row ${row}`;
             for (let col = 0; col < currentRow.length; col++) {
