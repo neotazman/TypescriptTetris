@@ -36,112 +36,265 @@ const StartingGameModel = {
 };
 // THE GAMEPIECES
 class GamePiece {
-    constructor(square) {
+    constructor(piece) {
         this.velocity = 1;
-        this.bluePrint = square;
+        this.rotation = 1;
+        this.bluePrint = piece[this.rotation];
         this.startingPosition = findStartingPosition(this.bluePrint);
         this.currentPosition = [0, 1];
+        // width and height define how many cell positions will be taken up with the tetrominos
+        this.height;
+        this.width;
+    }
+    rotate(input) {
+        if (input.key !== "W" || "S" || "A" || "D") {
+            if (input.key === "W") { // "W" counter-clockwise increase rotation
+                if (this.rotation === 4) {
+                    this.rotation = 1;
+                }
+                else {
+                    this.rotation++;
+                }
+                console.log(this.rotation);
+            }
+            else if (input.key === "S") { // "S" clockwise decrease rotation
+                if (this.rotation === 1) {
+                    this.rotation = 4;
+                }
+                else {
+                    this.rotation--;
+                }
+                console.log(this.rotation);
+            }
+            else if (input.key === "A") { // "A" move left
+                this.currentPosition[1]--;
+                console.log(this.currentPosition);
+            }
+            else if (input.key === "D") { // "D" move right
+                this.currentPosition[1]++;
+                console.log(this.currentPosition);
+            }
+            else
+                return;
+        }
     }
     draw(x, y) {
+        this.currentPosition[0]++;
     }
 }
 // STRAIGHT LINE
 class GamePiece1 extends GamePiece {
     constructor() {
-        super([
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-        ]);
+        super({
+            1: [
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+            ],
+            2: [
+                [0, 0, 0, 0],
+                [1, 1, 1, 1],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            3: [
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+            ],
+            4: [
+                [0, 0, 0, 0],
+                [1, 1, 1, 1],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+        });
     }
 }
 //"L"
 class GamePiece2 extends GamePiece {
     constructor() {
-        super([
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-            [0, 1, 1, 0],
-            [0, 0, 0, 0],
-        ]);
+        super({
+            1: [
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0],
+            ],
+            2: [
+                [0, 0, 1, 0],
+                [1, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            3: [
+                [0, 1, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 0],
+            ],
+            4: [
+                [1, 1, 1, 0],
+                [1, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+        });
     }
 }
 class GamePiece3 extends GamePiece {
     constructor() {
-        super([
-            [0, 0, 1, 0],
-            [0, 0, 1, 0],
-            [0, 1, 1, 0],
-            [0, 0, 0, 0],
-        ]);
+        super({
+            1: [
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0],
+            ],
+            2: [
+                [1, 1, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            3: [
+                [0, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            4: [
+                [1, 0, 0, 0],
+                [1, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+        });
     }
 }
 // "S"
 class GamePiece4 extends GamePiece {
     constructor() {
-        super([
-            [0, 1, 0, 0],
-            [0, 1, 1, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, 0],
-        ]);
+        super({
+            1: [
+                [0, 1, 0, 0],
+                [0, 1, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 0],
+            ],
+            2: [
+                [0, 1, 1, 0],
+                [1, 1, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            3: [
+                [0, 1, 0, 0],
+                [0, 1, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 0],
+            ],
+            4: [
+                [0, 1, 1, 0],
+                [1, 1, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+        });
     }
 }
 class GamePiece5 extends GamePiece {
     constructor() {
-        super([
-            [0, 0, 1, 0],
-            [0, 1, 1, 0],
-            [0, 1, 0, 0],
-            [0, 0, 0, 0],
-        ]);
+        super({
+            1: [
+                [0, 0, 1, 0],
+                [0, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            2: [
+                [1, 1, 0, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            3: [
+                [0, 0, 1, 0],
+                [0, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            4: [
+                [1, 1, 0, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+        });
     }
 }
 //SQUARE
 class GamePiece6 extends GamePiece {
     constructor() {
-        super([
-            [0, 1, 1, 0],
-            [0, 1, 1, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-        ]);
+        super({
+            1: [
+                [0, 1, 1, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            2: [
+                [0, 1, 1, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            3: [
+                [0, 1, 1, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            4: [
+                [0, 1, 1, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+        });
     }
 }
 //"T"
 class GamePiece7 extends GamePiece {
     constructor() {
-        super([
-            [0, 1, 0, 0],
-            [1, 1, 1, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-        ]);
-    }
-}
-function randomGamePiece() {
-    let random = Math.ceil(Math.random() * 7);
-    if (random === 1) {
-        return new GamePiece1();
-    }
-    if (random === 2) {
-        return new GamePiece2();
-    }
-    if (random === 3) {
-        return new GamePiece3();
-    }
-    if (random === 4) {
-        return new GamePiece4();
-    }
-    if (random === 5) {
-        return new GamePiece5();
-    }
-    if (random === 6) {
-        return new GamePiece6();
-    }
-    if (random === 7) {
-        return new GamePiece7();
+        super({
+            1: [
+                [0, 1, 0, 0],
+                [1, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            2: [
+                [0, 1, 0, 0],
+                [1, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            3: [
+                [1, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+            ],
+            4: [
+                [0, 1, 0, 0],
+                [0, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0],
+            ],
+        });
     }
 }
 class GameModel {
@@ -149,6 +302,7 @@ class GameModel {
         this.gameState = gamestate || StartingGameModel;
         this.gamePieceDroppingPosition = Math.floor(this.gameState.gameBoard[0].length / 2);
         this.movingPiece = false;
+        this.currentPiece;
     }
     newGameBoard(x, y) {
         theBoard.innerHTML = '';
@@ -188,7 +342,32 @@ class GameModel {
         }
         return interval;
     }
+    randomGamePiece() {
+        let random = Math.ceil(Math.random() * 7);
+        if (random === 1) {
+            return new GamePiece1();
+        }
+        if (random === 2) {
+            return new GamePiece2();
+        }
+        if (random === 3) {
+            return new GamePiece3();
+        }
+        if (random === 4) {
+            return new GamePiece4();
+        }
+        if (random === 5) {
+            return new GamePiece5();
+        }
+        if (random === 6) {
+            return new GamePiece6();
+        }
+        if (random === 7) {
+            return new GamePiece7();
+        }
+    }
     addGamePiece(gamepiece) {
+        this.currentPiece = gamepiece;
         for (let row of this.gameState.gameBoard) {
             row[this.gamePieceDroppingPosition] = 1;
         }
@@ -196,7 +375,7 @@ class GameModel {
     }
     update() {
         if (!this.movingPiece) {
-            this.addGamePiece(randomGamePiece());
+            this.addGamePiece(this.randomGamePiece());
         }
         this.buildGameBoard();
     }
