@@ -62,26 +62,28 @@ const StartingGameModel : GameState = {  // where the game state is stored
 
 // THE GAMEPIECES
 class GamePiece {
+    gameState: GameState | undefined
     velocity: number
-    startingPosition: CellPosition // [number, number]
+    cells: CellPosition[] // [number, number]
     currentPosition: CellPosition
     bluePrint: Tetromino
     rotation: 1 | 2 | 3 | 4 
     height: any // will change later, but i have to stop now
     width: any // will change later, but i have to stop now
-    constructor(piece: AllRotations) {
+    constructor(piece: AllRotations, gamestate?: GameState) {
+        this.gameState = gamestate
         this.velocity = 1 
         this.rotation = 1
         this.bluePrint = piece[this.rotation]
-        this.startingPosition = findStartingPosition(this.bluePrint)
+        this.cells = this.findCellPositions(this.bluePrint)
         this.currentPosition = [0, 1]
         // width and height define how many cell positions will be taken up with the tetrominos
         this.height 
         this.width
     }
-    rotate(input: any): void {
-        if(input.key !== "W" || "S" || "A" || "D"){
-            if(input.key === "W") { // "W" counter-clockwise increase rotation
+    rotate(event: any): void {
+        if(event.key !== "W" || "S" || "A" || "D"){
+            if(event.key === "W") { // "W" counter-clockwise increase rotation
                 if(this.rotation === 4) {
                     this.rotation = 1
                 } else {
@@ -89,7 +91,7 @@ class GamePiece {
                 }
                 console.log(this.rotation)
             } else 
-            if(input.key === "S") { // "S" clockwise decrease rotation
+            if(event.key === "S") { // "S" clockwise decrease rotation
                 if(this.rotation === 1) {
                     this.rotation = 4
                 } else {
@@ -97,15 +99,29 @@ class GamePiece {
                 }
                 console.log(this.rotation)
             } else 
-            if(input.key === "A") { // "A" move left
+            if(event.key === "A") { // "A" move left
                 this.currentPosition[1]--
                 console.log(this.currentPosition)
             } else 
-            if(input.key === "D") { // "D" move right
+            if(event.key === "D") { // "D" move right
                 this.currentPosition[1]++
                 console.log(this.currentPosition)
             } else return
         }
+    }
+    findCellPositions(piece: Tetromino) : CellPosition[] {
+        let fourCells: CellPosition[] = []
+        let result! : CellPosition
+        for(let i = 0; i < piece.length; i++) { // decided to make the starting position on the first line for every tetronimo, but this loop should still work
+            let currentRow = piece[i]
+            let found = currentRow.findIndex((cell) => cell === 1)
+            if(found === -1) continue
+            else {
+                result = [i, found]
+                fourCells.push(result)
+            }
+        }
+        return fourCells
     }
     draw(x?: number, y?: number) : void {
         this.currentPosition[0]++
@@ -420,19 +436,10 @@ class GameModel {
     }
 }
 
-function findStartingPosition(piece: Tetromino) : CellPosition {
-    let result! : CellPosition
-    for(let i = 0; i < piece.length; i++) { // decided to make the starting position on the first line for every tetronimo, but this loop should still work
-        let currentRow = piece[i]
-        let found = currentRow.findIndex((cell) => cell === 1)
-        if(found === -1) continue
-        else result = [i, found]
-    }
-    return result
-}
-
 
 let GameBoard = new GameModel()
+
+window.addEventListener("keydown", GameBoard.currentPiece!.rotate)
 
 let runGame = setInterval(() => {
     if(GameBoard.gameState.gameOver) {
