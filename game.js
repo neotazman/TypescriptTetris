@@ -301,6 +301,7 @@ class GameModel {
     constructor(gamestate) {
         this.gameState = gamestate || StartingGameModel;
         this.gamePieceDroppingPosition = Math.floor(this.gameState.gameBoard[0].length / 2);
+        // since currentPiece can return undefined, i could just remove movingPiece and check the boolean value for currentPiece, but i think this way is a better practice
         this.movingPiece = false;
         this.currentPiece;
     }
@@ -377,6 +378,9 @@ class GameModel {
         if (!this.movingPiece) {
             this.addGamePiece(this.randomGamePiece());
         }
+        else {
+            // this.currentPiece!.currentPosition[0]++ // i want to call update on the keydown event listener and i don't want the piece to fall when i do that
+        }
         this.buildGameBoard();
     }
 }
@@ -400,6 +404,9 @@ let runGame = setInterval(() => {
     }
     else {
         GameBoard.update();
+        if (GameBoard.movingPiece && typeof GameBoard.currentPiece === "number") {
+            GameBoard.currentPiece[0]++;
+        }
         console.log(GameBoard.gameState.level);
         GameBoard.gameState.level++;
         if (GameBoard.gameState.level >= 10) {
