@@ -123,7 +123,6 @@ class GameModel {
     }
 }
 const StartingGameModel = new GameModel();
-// THE GAMEPIECES
 class GamePiece {
     constructor(piece, gamestate) {
         this.gameState = gamestate || StartingGameModel;

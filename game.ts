@@ -28,23 +28,35 @@ interface GameState { // so the gamestate doesn't get fucked up
     score: number,
     gamePieceDroppingPosition: number
     movingPiece: boolean
+<<<<<<< HEAD
     currentPiece?: GamePiece
     stages: number
     currentStage: number
+=======
+    currentPiece: GamePiece | boolean
+>>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
 }
 
 
 //IT TOOK A WHILE FOR ME TO REALIZE, BUT I NEED THIS FOR THE GAME TO WORK
+<<<<<<< HEAD
 class GameModel {
+=======
+class StartingGameModel1 {
+>>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
     gameBoard: BoardRect
     gameOver: boolean 
     level: number
     score: number
     gamePieceDroppingPosition: number
     movingPiece: boolean
+<<<<<<< HEAD
     currentPiece?: GamePiece
     stages: number
     currentStage: number
+=======
+    currentPiece: GamePiece | boolean
+>>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
     constructor() {
         this.gameBoard = [ 
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -79,6 +91,7 @@ class GameModel {
         this.gamePieceDroppingPosition = Math.floor(this.gameBoard[0].length / 2)
         // since currentPiece can return undefined, i could just remove movingPiece and check the boolean value for currentPiece, but i think this way is a better practice
         this.movingPiece = false
+<<<<<<< HEAD
         this.currentPiece
         this.stages = this.gameBoard.length
         this.currentStage = 1
@@ -164,6 +177,13 @@ class GameModel {
 }
 
 const StartingGameModel : GameState = new GameModel()
+=======
+        this.currentPiece = false
+    }
+}
+
+const StartingGameModel : GameState = new StartingGameModel1()
+>>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
 
 
 
@@ -176,6 +196,11 @@ class GamePiece {
     bluePrint: Tetromino
     rotation: 1 | 2 | 3 | 4 
     isFalling: boolean
+<<<<<<< HEAD
+=======
+    height: any // will change later, but i have to stop now
+    width: any // will change later, but i have to stop now
+>>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
     constructor(piece: AllRotations, gamestate: GameState) {
         this.gameState = gamestate || StartingGameModel
         this.velocity = 1 
@@ -183,7 +208,14 @@ class GamePiece {
         this.bluePrint = piece[this.rotation]
         this.cells = this.findCellPositions(this.bluePrint)
         this.currentPosition = [0, 1]
+<<<<<<< HEAD
         this.isFalling = this.gameState.movingPiece
+=======
+        this.isFalling = true
+        // width and height define how many cell positions will be taken up with the tetrominos
+        this.height 
+        this.width
+>>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
     }
     rotate(event: any): void {
         if(event.key !== "W" || "S" || "A" || "D"){
@@ -230,9 +262,13 @@ class GamePiece {
     draw(x?: number, y?: number) : void {
         if(this.isFalling) {
             for(let cell of this.cells) {
+<<<<<<< HEAD
                 if(this.gameState.gameBoard[this.gameState.currentStage]) {
 
                 }
+=======
+
+>>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
             }
         }
     }
@@ -452,23 +488,128 @@ class GamePiece7 extends GamePiece {
                 [0, 0, 0, 0],
             ],
         }, gamestate)
+<<<<<<< HEAD
+=======
+    }
+}
+
+
+class GameModel {
+    gameState: GameState
+    // gamePieceDroppingPosition: number
+    // movingPiece: boolean
+    // currentPiece: GamePiece //| undefined
+    constructor(gamestate?: GameState) {
+        this.gameState = gamestate || StartingGameModel
+        // this.gamePieceDroppingPosition = Math.floor(this.gameState.gameBoard[0].length / 2)
+        // // since currentPiece can return undefined, i could just remove movingPiece and check the boolean value for currentPiece, but i think this way is a better practice
+        // this.movingPiece = false
+        // this.currentPiece = new GamePiece1(this.gameState)
+    }
+    newGameBoard(x: number, y: number): void {
+        theBoard.innerHTML = ''
+        this.gameState.gameBoard = []
+        for(let i = 0; i < y; i++) {
+            let currentLine = []
+            for(let j = 0; j < x; j++) {
+                currentLine.push(0)
+            }
+            this.gameState.gameBoard.push(currentLine)
+        }
+        console.table(this.gameState.gameBoard)
+    }
+    buildGameBoard(): void {// rebuilds the game board with the current gamestate
+        theBoard.innerHTML = '' // clear the board
+        for(let row = 0; row < this.gameState.gameBoard.length; row++) { // makes the board match the game model
+            let currentRow = this.gameState.gameBoard[row]
+            let thisRow = document.createElement('tr')
+            thisRow.className = `row ${row}`
+            for(let col = 0; col < currentRow.length; col++) {
+                let filled = ''
+                if(currentRow[col] === (1 || 2)) { // adds the className filled when it's filled
+                    filled+= ' filled'
+                }
+                let currentCell = document.createElement('td')
+                currentCell.className = `cell ${col}${filled}` // if the cell is empty the "filled" value is an empty string
+                thisRow.append(currentCell)
+            }
+            theBoard.append(thisRow)
+        }
+        document.body.append(theBoard)
+    }
+    levelInterval(): number {
+        let interval = 2000
+        for(let i = 0; i < this.gameState.level; i++) {
+            interval = interval * 0.9
+        }
+        return interval
+    }
+    randomGamePiece(): GamePiece { // this function will always return a random GamePiece, but since all the return statements are inside if statements, typescript thinks it could return nothing
+        let random: number = Math.ceil(Math.random() * 7)
+        if(random === 1) {
+            return new GamePiece1(this.gameState)
+        }
+        if(random === 2) {
+            return new GamePiece2(this.gameState)
+        }
+        if(random === 3) {
+            return new GamePiece3(this.gameState)
+        }
+        if(random === 4) {
+            return new GamePiece4(this.gameState)
+        }
+        if(random === 5) {
+            return new GamePiece5(this.gameState)
+        }
+        if(random === 6) {
+            return new GamePiece6(this.gameState)
+        }
+        else {
+            return new GamePiece7(this.gameState)
+        }
+    }
+    addGamePiece(gamepiece: GamePiece): void {
+        this.gameState.currentPiece = gamepiece
+        for(let row of this.gameState.gameBoard) {
+            row[this.gameState.gamePieceDroppingPosition] = 1
+        }
+        this.gameState.movingPiece = true
+    }
+    update(): void {
+        if(!this.gameState.movingPiece) {
+            this.addGamePiece(this.randomGamePiece())
+        } else {
+            // this.currentPiece!.currentPosition[0]++ // i want to call update on the keydown event listener and i don't want the piece to fall when i do that
+        }
+        this.buildGameBoard()
+>>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
     }
 }
 
 
 let GameBoard = new GameModel()
 
+<<<<<<< HEAD
 if(GameBoard.currentPiece) {
     window.addEventListener("keydown", GameBoard.currentPiece.rotate)
 }
+=======
+//window.addEventListener("keydown", GameBoard.currentPiece!.rotate)
+
+>>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
 let runGame = setInterval(() => {
     if(GameBoard.gameOver) {
         clearInterval(runGame)
         console.log(GameBoard)
     } else {
         GameBoard.update()
+<<<<<<< HEAD
         if(GameBoard.movingPiece && typeof GameBoard.currentPiece === "number") {
             GameBoard.currentStage++
+=======
+        if(GameBoard.gameState.movingPiece && typeof GameBoard.gameState.currentPiece === "number") {
+            GameBoard.gameState.currentPiece[0]++
+>>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
         }
         console.log(GameBoard.level)
         GameBoard.level++
