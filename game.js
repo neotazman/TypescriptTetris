@@ -37,6 +37,7 @@ class GameModel {
         this.score = 0;
         this.gamePieceDroppingPosition = Math.floor(this.gameBoard[0].length / 2);
         // since currentPiece can return undefined, i could just remove movingPiece and check the boolean value for currentPiece, but i think this way is a better practice
+        this.currentPiecePosition = this.gamePieceDroppingPosition;
         this.movingPiece = false;
         this.currentPiece;
         this.stages = this.gameBoard.length;
@@ -75,9 +76,7 @@ class GameModel {
     }
     levelInterval() {
         let interval = 2000;
-        for (let i = 0; i < this.level; i++) {
-            interval = interval * 0.9;
-        }
+        interval * 0.9 ^ this.level;
         return interval;
     }
     randomGamePiece() {
@@ -123,6 +122,7 @@ class GameModel {
     }
 }
 const StartingGameModel = new GameModel();
+// THE GAMEPIECES
 class GamePiece {
     constructor(piece, gamestate) {
         this.gameState = gamestate || StartingGameModel;
@@ -130,11 +130,12 @@ class GamePiece {
         this.rotation = 1;
         this.bluePrint = piece[this.rotation];
         this.cells = this.findCellPositions(this.bluePrint);
-        this.currentPosition = [0, 1];
+        this.currentPosition = [0, this.gameState.currentStage];
         this.isFalling = this.gameState.movingPiece;
     }
-    rotate(event) {
+    control(event) {
         if (event.key !== "W" || "S" || "A" || "D") {
+            // ROTATE
             if (event.key === "W") { // "W" counter-clockwise increase rotation
                 if (this.rotation === 4) {
                     this.rotation = 1;
@@ -153,7 +154,9 @@ class GamePiece {
                 }
                 console.log(this.rotation);
             }
-            else if (event.key === "A") { // "A" move left
+            else 
+            // MOVE
+            if (event.key === "A") { // "A" move left
                 this.currentPosition[1]--;
                 console.log(this.currentPosition);
             }
@@ -181,9 +184,9 @@ class GamePiece {
         return fourCells;
     }
     draw(x, y) {
-        if (this.isFalling) {
+        if (this.isFalling && this.gameState.currentPiece === this) {
             for (let cell of this.cells) {
-                if (this.gameState.gameBoard[this.gameState.currentStage]) {
+                if (this.gameState.gameBoard[this.gameState.currentStage][this.gameState.currentPiecePosition]) {
                 }
             }
         }
@@ -407,7 +410,7 @@ class GamePiece7 extends GamePiece {
 }
 let GameBoard = new GameModel();
 if (GameBoard.currentPiece) {
-    window.addEventListener("keydown", GameBoard.currentPiece.rotate);
+    window.addEventListener("keydown", GameBoard.currentPiece.control);
 }
 let runGame = setInterval(() => {
     if (GameBoard.gameOver) {
@@ -416,7 +419,7 @@ let runGame = setInterval(() => {
     }
     else {
         GameBoard.update();
-        if (GameBoard.movingPiece && typeof GameBoard.currentPiece === "number") {
+        if (GameBoard.movingPiece) {
             GameBoard.currentStage++;
         }
         console.log(GameBoard.level);
