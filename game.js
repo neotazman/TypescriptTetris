@@ -2,47 +2,56 @@
 ///// Typescript tetris
 const theBoard = document.createElement('table');
 theBoard.id = 'gameBoard';
-const StartingGameModel = {
-    gameBoard: [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ],
-    gameOver: false,
-    level: 1,
-    score: 0,
-};
+//IT TOOK A WHILE FOR ME TO REALIZE, BUT I NEED THIS FOR THE GAME TO WORK
+class StartingGameModel1 {
+    constructor() {
+        this.gameBoard = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ];
+        this.gameOver = false;
+        this.level = 1;
+        this.score = 0;
+        this.gamePieceDroppingPosition = Math.floor(this.gameBoard[0].length / 2);
+        // since currentPiece can return undefined, i could just remove movingPiece and check the boolean value for currentPiece, but i think this way is a better practice
+        this.movingPiece = false;
+        this.currentPiece = false;
+    }
+}
+const StartingGameModel = new StartingGameModel1();
 // THE GAMEPIECES
 class GamePiece {
     constructor(piece, gamestate) {
-        this.gameState = gamestate;
+        this.gameState = gamestate || StartingGameModel;
         this.velocity = 1;
         this.rotation = 1;
         this.bluePrint = piece[this.rotation];
         this.cells = this.findCellPositions(this.bluePrint);
         this.currentPosition = [0, 1];
+        this.isFalling = true;
         // width and height define how many cell positions will be taken up with the tetrominos
         this.height;
         this.width;
@@ -95,12 +104,16 @@ class GamePiece {
         return fourCells;
     }
     draw(x, y) {
-        this.currentPosition[0]++;
+        if (this.isFalling) {
+            for (let cell of this.cells) {
+            }
+        }
     }
 }
+// TETRIS SHAPES -- takes one argument "gamestate", the rest of the subclass is the argument for the superclass
 // STRAIGHT LINE
 class GamePiece1 extends GamePiece {
-    constructor() {
+    constructor(gamestate) {
         super({
             1: [
                 [0, 1, 0, 0],
@@ -126,12 +139,12 @@ class GamePiece1 extends GamePiece {
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
             ],
-        });
+        }, gamestate);
     }
 }
 //"L"
 class GamePiece2 extends GamePiece {
-    constructor() {
+    constructor(gamestate) {
         super({
             1: [
                 [0, 1, 0, 0],
@@ -157,11 +170,11 @@ class GamePiece2 extends GamePiece {
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
             ],
-        });
+        }, gamestate);
     }
 }
 class GamePiece3 extends GamePiece {
-    constructor() {
+    constructor(gamestate) {
         super({
             1: [
                 [0, 0, 1, 0],
@@ -187,12 +200,12 @@ class GamePiece3 extends GamePiece {
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
             ],
-        });
+        }, gamestate);
     }
 }
 // "S"
 class GamePiece4 extends GamePiece {
-    constructor() {
+    constructor(gamestate) {
         super({
             1: [
                 [0, 1, 0, 0],
@@ -218,11 +231,11 @@ class GamePiece4 extends GamePiece {
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
             ],
-        });
+        }, gamestate);
     }
 }
 class GamePiece5 extends GamePiece {
-    constructor() {
+    constructor(gamestate) {
         super({
             1: [
                 [0, 0, 1, 0],
@@ -248,12 +261,12 @@ class GamePiece5 extends GamePiece {
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
             ],
-        });
+        }, gamestate);
     }
 }
 //SQUARE
 class GamePiece6 extends GamePiece {
-    constructor() {
+    constructor(gamestate) {
         super({
             1: [
                 [0, 1, 1, 0],
@@ -279,12 +292,12 @@ class GamePiece6 extends GamePiece {
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
             ],
-        });
+        }, gamestate);
     }
 }
 //"T"
 class GamePiece7 extends GamePiece {
-    constructor() {
+    constructor(gamestate) {
         super({
             1: [
                 [0, 1, 0, 0],
@@ -310,16 +323,19 @@ class GamePiece7 extends GamePiece {
                 [0, 1, 0, 0],
                 [0, 0, 0, 0],
             ],
-        });
+        }, gamestate);
     }
 }
 class GameModel {
+    // gamePieceDroppingPosition: number
+    // movingPiece: boolean
+    // currentPiece: GamePiece //| undefined
     constructor(gamestate) {
         this.gameState = gamestate || StartingGameModel;
-        this.gamePieceDroppingPosition = Math.floor(this.gameState.gameBoard[0].length / 2);
-        // since currentPiece can return undefined, i could just remove movingPiece and check the boolean value for currentPiece, but i think this way is a better practice
-        this.movingPiece = false;
-        this.currentPiece;
+        // this.gamePieceDroppingPosition = Math.floor(this.gameState.gameBoard[0].length / 2)
+        // // since currentPiece can return undefined, i could just remove movingPiece and check the boolean value for currentPiece, but i think this way is a better practice
+        // this.movingPiece = false
+        // this.currentPiece = new GamePiece1(this.gameState)
     }
     newGameBoard(x, y) {
         theBoard.innerHTML = '';
@@ -362,36 +378,36 @@ class GameModel {
     randomGamePiece() {
         let random = Math.ceil(Math.random() * 7);
         if (random === 1) {
-            return new GamePiece1();
+            return new GamePiece1(this.gameState);
         }
         if (random === 2) {
-            return new GamePiece2();
+            return new GamePiece2(this.gameState);
         }
         if (random === 3) {
-            return new GamePiece3();
+            return new GamePiece3(this.gameState);
         }
         if (random === 4) {
-            return new GamePiece4();
+            return new GamePiece4(this.gameState);
         }
         if (random === 5) {
-            return new GamePiece5();
+            return new GamePiece5(this.gameState);
         }
         if (random === 6) {
-            return new GamePiece6();
+            return new GamePiece6(this.gameState);
         }
-        if (random === 7) {
-            return new GamePiece7();
+        else {
+            return new GamePiece7(this.gameState);
         }
     }
     addGamePiece(gamepiece) {
-        this.currentPiece = gamepiece;
+        this.gameState.currentPiece = gamepiece;
         for (let row of this.gameState.gameBoard) {
-            row[this.gamePieceDroppingPosition] = 1;
+            row[this.gameState.gamePieceDroppingPosition] = 1;
         }
-        this.movingPiece = true;
+        this.gameState.movingPiece = true;
     }
     update() {
-        if (!this.movingPiece) {
+        if (!this.gameState.movingPiece) {
             this.addGamePiece(this.randomGamePiece());
         }
         else {
@@ -401,7 +417,7 @@ class GameModel {
     }
 }
 let GameBoard = new GameModel();
-window.addEventListener("keydown", GameBoard.currentPiece.rotate);
+//window.addEventListener("keydown", GameBoard.currentPiece!.rotate)
 let runGame = setInterval(() => {
     if (GameBoard.gameState.gameOver) {
         clearInterval(runGame);
@@ -409,8 +425,8 @@ let runGame = setInterval(() => {
     }
     else {
         GameBoard.update();
-        if (GameBoard.movingPiece && typeof GameBoard.currentPiece === "number") {
-            GameBoard.currentPiece[0]++;
+        if (GameBoard.gameState.movingPiece && typeof GameBoard.gameState.currentPiece === "number") {
+            GameBoard.gameState.currentPiece[0]++;
         }
         console.log(GameBoard.gameState.level);
         GameBoard.gameState.level++;
