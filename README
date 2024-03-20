@@ -5,9 +5,3 @@
 # trying to add the gamestate as a parameter for the gamepiece class, still need to adjust it
     a) put the gamestate parameter on each of the subclasses
     b) the rest of the subclass is the argument for the superclass
-    c) instead of undefined as a possible type, i just set a default for the game
-
-# it's a bit sloppy that the gamestate is instantiated with a different class the the gameboard, but i realized after 30+ hours of work thatt it needed to be done to salvage the game at all
-
-
-I JUST CONFUSED MYSELF SO MUCH AND I THINK I JUST REPEATED THE SAME THING FOR NOTHING
