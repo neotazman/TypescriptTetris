@@ -29,9 +29,9 @@ interface GameState { // so the gamestate doesn't get fucked up
     gamePieceDroppingPosition: number
     movingPiece: boolean
     currentPiece?: GamePiece
-    currentPiecePosition: number
+    currentXPos: number
     stages: number
-    currentStage: number
+    currentYPos: number
 }
 
 
@@ -44,9 +44,9 @@ class GameModel {
     gamePieceDroppingPosition: number
     movingPiece: boolean
     currentPiece?: GamePiece
-    currentPiecePosition: number
+    currentXPos: number
     stages: number
-    currentStage: number
+    currentYPos: number
     constructor() {
         this.gameBoard = [ 
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -79,13 +79,11 @@ class GameModel {
         this.level = 1
         this.score = 0
         this.gamePieceDroppingPosition = Math.floor(this.gameBoard[0].length / 2)
-        // since currentPiece can return undefined, i could just remove movingPiece and check the boolean value for currentPiece, but i think this way is a better practice
-        this.currentPiecePosition = this.gamePieceDroppingPosition
+        this.currentXPos = this.gamePieceDroppingPosition
         this.movingPiece = false
-        this.currentPiece
-
+        // this.currentPiece if the property is optional i shouldn't instantiate it until the update function is called
         this.stages = this.gameBoard.length
-        this.currentStage = 1
+        this.currentYPos = 0
     }
     newGameBoard(x: number, y: number): void {
         theBoard.innerHTML = ''
@@ -158,6 +156,7 @@ class GameModel {
         if(!this.movingPiece) {
             this.addGamePiece(this.randomGamePiece())
             this.movingPiece = true
+            console.log(this.currentPiece)
         } else {
             // this.currentPiece!.currentPosition[0]++ // i want to call update on the keydown event listener and i don't want the piece to fall when i do that
         }
@@ -174,7 +173,7 @@ class GamePiece {
     gameState: GameState //| undefined
     velocity: number
     cells: CellPosition[] // [number, number]
-    currentPosition: CellPosition
+    currentPosition: {x: number, y: number}
     bluePrint: Tetromino
     rotation: 1 | 2 | 3 | 4 
     isFalling: boolean
@@ -184,7 +183,10 @@ class GamePiece {
         this.rotation = 1
         this.bluePrint = piece[this.rotation]
         this.cells = this.findCellPositions(this.bluePrint)
-        this.currentPosition = [0, this.gameState.currentStage]
+        this.currentPosition = {
+            x: this.gameState.currentXPos,
+            y: this.gameState.currentYPos,
+        };
         this.isFalling = this.gameState.movingPiece
     }
     control(event: any): void {
@@ -208,11 +210,11 @@ class GamePiece {
             } else 
             // MOVE
             if(event.key === "A") { // "A" move left
-                this.currentPosition[1]--
+                this.currentPosition.x--
                 console.log(this.currentPosition)
             } else 
             if(event.key === "D") { // "D" move right
-                this.currentPosition[1]++
+                this.currentPosition.x++
                 console.log(this.currentPosition)
             } else return
         }
@@ -220,22 +222,27 @@ class GamePiece {
     findCellPositions(piece: Tetromino) : CellPosition[] {
         let fourCells: CellPosition[] = []
         let result! : CellPosition
+        let allIndices: number[] = []
         for(let i = 0; i < piece.length; i++) { // decided to make the starting position on the first line for every tetronimo, but this loop should still work
+
             let currentRow = piece[i]
-            let found = currentRow.findIndex((cell) => cell === 1)
-            if(found === -1) continue
-            else {
-                result = [i, found]
-                fourCells.push(result)
+            let foundArr = currentRow.map(x => x === 1)
+            for(let j = 0; j < foundArr.length; j++) { 
+                if(currentRow[j]) {
+                    fourCells.push([i, j])
+                }
             }
         }
         return fourCells
     }
     draw(x?: number, y?: number) : void {
-        let dx 
-        if(this.isFalling && this.gameState.currentPiece === this) {
-            for(let cell of this.cells) {
-                
+        if (this.isFalling && this.gameState.currentPiece === this) {
+            for (let cell of this.cells) {
+                let dy = cell[0]
+                let dx = cell[1]
+                if(this.gameState.gameBoard[this.currentPosition.x + dx, this.currentPosition.y + dy]) {
+
+                }
             }
         }
     }
@@ -471,7 +478,7 @@ let runGame = setInterval(() => {
     } else {
         GameBoard.update()
         if(GameBoard.movingPiece) {
-            GameBoard.currentStage++
+            GameBoard.currentYPos++
         }
         console.log(GameBoard.level)
         GameBoard.level++

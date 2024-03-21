@@ -4,11 +4,10 @@
 
 # trying to add the gamestate as a parameter for the gamepiece class, still need to adjust it
     a) put the gamestate parameter on each of the subclasses
-<<<<<<< HEAD
     b) the rest of the subclass is the argument for the superclass
-=======
-    b) the rest of the subclass is the argument for the superclass
-    c) instead of undefined as a possible type, i just set a default for the game
 
-# it's a bit sloppy that the gamestate is instantiated with a different class the the gameboard, but i realized after 30+ hours of work thatt it needed to be done to salvage the game at all
->>>>>>> 93a6017a71364f19263922b06fe866d110a289f4
+# findIndex takes an optional second argument of which index to start with. 
+    a) make a function indices(previousIndex?) run the findIndex function within indices
+    b) add the return 
+    c) within the findIndex callback function, if it would return true, add the value to an array and run indices with the value of the previous return value to add to the value array  
+
