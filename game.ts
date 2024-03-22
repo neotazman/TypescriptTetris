@@ -88,7 +88,7 @@ class GameModel {
         // this.currentPiece if the property is optional i shouldn't instantiate it until the update function is called
         this.yCells = this.gameBoard.length
         this.currentYPos = 0
-        this.interval = 2000
+        this.interval = 1000
     }
     newGameBoard(x: number, y: number): void {
         theBoard.innerHTML = ''
@@ -108,12 +108,15 @@ class GameModel {
             let thisRow = document.createElement('tr')
             thisRow.className = `row ${row}`
             for(let col = 0; col < currentRow.length; col++) {
-                let filled = ''
-                if(currentRow[col] === (1 || 2)) { // adds the className filled when it's filled
-                    filled+= ' filled'
+                let falling = ''
+                let fallen = ''
+                if(currentRow[col] === 1) { // adds the className falling when it's falling
+                    falling+= ' filled'
+                } else if(currentRow[col] === 2) { // adds the className falling when it's falling'}
+                    fallen+= ' fallen'
                 }
                 let currentCell = document.createElement('td')
-                currentCell.className = `cell ${col}${filled}` // if the cell is empty the "filled" value is an empty string
+                currentCell.className = `cell ${col}${falling}${fallen}` // if the cell is empty the "filled" value is an empty string
                 thisRow.append(currentCell)
             }
             theBoard.append(thisRow)
@@ -156,7 +159,7 @@ class GameModel {
     update(): void {
         if(!this.currentPiece) {
             this.addGamePiece(this.randomGamePiece())
-            this.update()
+            this.update()// is this working?
         } else {
             this.newGameBoard(this.xCells, this.yCells)
             this.currentPiece.draw()
@@ -178,14 +181,16 @@ class GamePiece {
     velocity: number
     cells: CellPosition[] // [number, number]
     currentPosition: {x: number, y: number}
+    fullGamePiece: AllRotations
     bluePrint: Tetromino
     rotation: 1 | 2 | 3 | 4 
     isFalling: boolean
     constructor(piece: AllRotations, gamestate: GameState) {
+        this.fullGamePiece = piece
         this.gameState = gamestate || StartingGameModel
         this.velocity = this.gameState.level
         this.rotation = 1
-        this.bluePrint = piece[this.rotation]
+        this.bluePrint = this.fullGamePiece[this.rotation]
         this.cells = this.findCellPositions(this.bluePrint)
         this.currentPosition = {
             x: this.gameState.currentXPos,
@@ -252,6 +257,8 @@ class GamePiece {
                 this.currentPosition.x++
                 console.log(this.currentPosition)
             } 
+            this.gameState.currentXPos = this.currentPosition.x
+            this.bluePrint = this.fullGamePiece[this.rotation]
             this.draw()
             return
         }
@@ -480,6 +487,8 @@ class GamePiece7 extends GamePiece {
 let GameBoard = new GameModel() // even though i create a new game model in DOMLoaded i need GameBoard to be a global variable so other functions can read it
 window.addEventListener('DOMLoaded', () => { // this is my first typescript game. i never understood why you need a DOMLoaded event listener if you instantiate the code after it is created, but now i realize that javascript being loosely typed makes it so it doesn't check if a function works before you call it, so i need to make a new GameModel as soon as the page loads so it doesn't read the code until after it's instantied
     GameBoard = new GameModel()
+    GameBoard.update()
+    console.log(GameBoard.currentPiece)
     if(GameBoard.currentPiece) {
         window.addEventListener("keydown", GameBoard.currentPiece.control)
     }
@@ -496,7 +505,7 @@ let runGame = setInterval(() => {
             GameBoard.currentYPos++
         }
         GameBoard.level++
-        if(GameBoard.level >= 10) {
+        if(GameBoard.level >= GameBoard.yCells - 2) {
             GameBoard.gameOver = true
         }
     }
