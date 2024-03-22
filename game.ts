@@ -29,11 +29,12 @@ interface GameState { // so the gamestate doesn't get fucked up
     gamePieceDroppingPosition: number
     movingPiece: boolean
     currentPiece?: GamePiece
+    xCells: number
     currentXPos: number
-    stages: number
+    yCells: number
     currentYPos: number
+    interval: number
 }
-
 
 //IT TOOK A WHILE FOR ME TO REALIZE, BUT I NEED THIS FOR THE GAME TO WORK
 class GameModel {
@@ -44,9 +45,11 @@ class GameModel {
     gamePieceDroppingPosition: number
     movingPiece: boolean
     currentPiece?: GamePiece
+    xCells: number
     currentXPos: number
-    stages: number
+    yCells: number
     currentYPos: number
+    interval: number
     constructor() {
         this.gameBoard = [ 
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -78,12 +81,14 @@ class GameModel {
         this.gameOver = false
         this.level = 1
         this.score = 0
-        this.gamePieceDroppingPosition = Math.floor(this.gameBoard[0].length / 2)
+        this.xCells = this.gameBoard[0].length
+        this.gamePieceDroppingPosition = Math.floor(this.xCells / 2)
         this.currentXPos = this.gamePieceDroppingPosition
         this.movingPiece = false
         // this.currentPiece if the property is optional i shouldn't instantiate it until the update function is called
-        this.stages = this.gameBoard.length
+        this.yCells = this.gameBoard.length
         this.currentYPos = 0
+        this.interval = 2000
     }
     newGameBoard(x: number, y: number): void {
         theBoard.innerHTML = ''
@@ -95,7 +100,6 @@ class GameModel {
             }
             this.gameBoard.push(currentLine)
         }
-        console.table(this.gameBoard)
     }
     buildGameBoard(): void {// rebuilds the game board with the current gamestate
         theBoard.innerHTML = '' // clear the board
@@ -116,10 +120,9 @@ class GameModel {
         }
         document.body.append(theBoard)
     }
-    levelInterval(): number {
-        let interval = 2000
-        interval * 0.9 ^ this.level
-        return interval
+    levelInterval(): void {
+        this.interval = this.interval * 0.9 ^ this.level
+        console.log(this.interval)
     }
     randomGamePiece(): GamePiece { // this function will always return a random GamePiece, but since all the return statements are inside if statements, typescript thinks it could return nothing
         let random: number = Math.ceil(Math.random() * 7)
@@ -147,17 +150,17 @@ class GameModel {
     }
     addGamePiece(gamepiece: GamePiece): void {
         this.currentPiece = gamepiece
-        for(let row of this.gameBoard) {
-            row[this.gamePieceDroppingPosition] = 1
-        }
         this.movingPiece = true
+        this.currentPiece.draw()
     }
     update(): void {
-        if(!this.movingPiece) {
+        if(!this.currentPiece) {
             this.addGamePiece(this.randomGamePiece())
-            this.movingPiece = true
-            console.log(this.currentPiece)
+            this.update()
         } else {
+            this.newGameBoard(this.xCells, this.yCells)
+            this.currentPiece.draw()
+            this.levelInterval()
             // this.currentPiece!.currentPosition[0]++ // i want to call update on the keydown event listener and i don't want the piece to fall when i do that
         }
         this.buildGameBoard()
@@ -169,6 +172,7 @@ const StartingGameModel : GameState = new GameModel()
 
 
 // THE GAMEPIECES
+
 class GamePiece {
     gameState: GameState //| undefined
     velocity: number
@@ -179,52 +183,19 @@ class GamePiece {
     isFalling: boolean
     constructor(piece: AllRotations, gamestate: GameState) {
         this.gameState = gamestate || StartingGameModel
-        this.velocity = 1 
+        this.velocity = this.gameState.level
         this.rotation = 1
         this.bluePrint = piece[this.rotation]
         this.cells = this.findCellPositions(this.bluePrint)
         this.currentPosition = {
             x: this.gameState.currentXPos,
             y: this.gameState.currentYPos,
-        };
-        this.isFalling = this.gameState.movingPiece
-    }
-    control(event: any): void {
-        if(event.key !== "W" || "S" || "A" || "D"){
-            // ROTATE
-            if(event.key === "W") { // "W" counter-clockwise increase rotation
-                if(this.rotation === 4) {
-                    this.rotation = 1
-                } else {
-                    this.rotation++
-                }
-                console.log(this.rotation)
-            } else 
-            if(event.key === "S") { // "S" clockwise decrease rotation
-                if(this.rotation === 1) {
-                    this.rotation = 4
-                } else {
-                    this.rotation--
-                }
-                console.log(this.rotation)
-            } else 
-            // MOVE
-            if(event.key === "A") { // "A" move left
-                this.currentPosition.x--
-                console.log(this.currentPosition)
-            } else 
-            if(event.key === "D") { // "D" move right
-                this.currentPosition.x++
-                console.log(this.currentPosition)
-            } else return
         }
+        this.isFalling = this.gameState.movingPiece
     }
     findCellPositions(piece: Tetromino) : CellPosition[] {
         let fourCells: CellPosition[] = []
-        let result! : CellPosition
-        let allIndices: number[] = []
         for(let i = 0; i < piece.length; i++) { // decided to make the starting position on the first line for every tetronimo, but this loop should still work
-
             let currentRow = piece[i]
             let foundArr = currentRow.map(x => x === 1)
             for(let j = 0; j < foundArr.length; j++) { 
@@ -236,14 +207,53 @@ class GamePiece {
         return fourCells
     }
     draw(x?: number, y?: number) : void {
-        if (this.isFalling && this.gameState.currentPiece === this) {
+        if (this.gameState.currentPiece === this) {
+            this.currentPosition = {
+                x: this.gameState.currentXPos,
+                y: this.gameState.currentYPos,
+            }
             for (let cell of this.cells) {
                 let dy = cell[0]
                 let dx = cell[1]
-                if(this.gameState.gameBoard[this.currentPosition.x + dx, this.currentPosition.y + dy]) {
-
+                let exactY = this.currentPosition.y + dy
+                let exactX = this.currentPosition.x + dx
+                if(this.gameState.gameBoard[exactY][exactX] !== 2) {
+                    this.gameState.gameBoard[exactY][exactX] = 1
                 }
             }
+        }
+    }
+    control(event: KeyboardEvent): void {
+        console.log(event)
+        if(event.key !== "w" || "s" || "a" || "d"){
+            // ROTATE
+            if(event.key === "w") { // "W" counter-clockwise increase rotation
+                if(this.rotation === 4) {
+                    this.rotation = 1
+                } else {
+                    this.rotation++
+                }
+                console.log(this.rotation)
+            } else 
+            if(event.key === "s") { // "S" clockwise decrease rotation
+                if(this.rotation === 1) {
+                    this.rotation = 4
+                } else {
+                    this.rotation--
+                }
+                console.log(this.rotation)
+            } else 
+            // MOVE
+            if(event.key === "a") { // "A" move left
+                this.currentPosition.x--
+                console.log(this.currentPosition)
+            } else 
+            if(event.key === "d") { // "D" move right
+                this.currentPosition.x++
+                console.log(this.currentPosition)
+            } 
+            this.draw()
+            return
         }
     }
 }
@@ -466,11 +476,16 @@ class GamePiece7 extends GamePiece {
 }
 
 
-let GameBoard = new GameModel()
 
-if(GameBoard.currentPiece) {
-    window.addEventListener("keydown", GameBoard.currentPiece.control)
-}
+let GameBoard = new GameModel() // even though i create a new game model in DOMLoaded i need GameBoard to be a global variable so other functions can read it
+window.addEventListener('DOMLoaded', () => { // this is my first typescript game. i never understood why you need a DOMLoaded event listener if you instantiate the code after it is created, but now i realize that javascript being loosely typed makes it so it doesn't check if a function works before you call it, so i need to make a new GameModel as soon as the page loads so it doesn't read the code until after it's instantied
+    GameBoard = new GameModel()
+    if(GameBoard.currentPiece) {
+        window.addEventListener("keydown", GameBoard.currentPiece.control)
+    }
+})
+GameBoard.update()
+
 let runGame = setInterval(() => {
     if(GameBoard.gameOver) {
         clearInterval(runGame)
@@ -480,12 +495,11 @@ let runGame = setInterval(() => {
         if(GameBoard.movingPiece) {
             GameBoard.currentYPos++
         }
-        console.log(GameBoard.level)
         GameBoard.level++
         if(GameBoard.level >= 10) {
             GameBoard.gameOver = true
         }
     }
-}, GameBoard.levelInterval())
+}, GameBoard.interval)
 
-GameBoard.update()
+// GameBoard.update()
