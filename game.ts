@@ -156,6 +156,12 @@ class GameModel {
         this.movingPiece = true
         this.currentPiece.draw()
     }
+    isOnBoard(piece?: GamePiece): boolean {
+        let cellPositions = piece ? piece.cells : null
+        return (
+            this.currentXPos >= 0 && this.currentXPos <= this.gameBoard[0].length - 5 && this.currentYPos >= 0 && this.currentYPos <= this.gameBoard.length - 5
+        )
+    }
     update(): void {
         if(!this.currentPiece) {
             this.addGamePiece(this.randomGamePiece())
@@ -212,6 +218,7 @@ class GamePiece {
         return fourCells
     }
     draw(x?: number, y?: number) : void {
+        if(this.gameState.isOnBoard(this))
         if (this.gameState.currentPiece === this) {
             this.currentPosition = {
                 x: this.gameState.currentXPos,
