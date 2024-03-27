@@ -84,7 +84,7 @@ class GameModel {
     }
     levelInterval() {
         this.interval = this.interval * 0.9 ^ this.level;
-        console.log(this.interval);
+        // console.log(this.interval)
     }
     randomGamePiece() {
         let random = Math.ceil(Math.random() * 7);
@@ -180,7 +180,7 @@ class GamePiece {
     }
     control(event) {
         if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d") {
-            console.log(event);
+            // console.log(event)
             // ROTATE
             if (event.key === "w") { // "W" counter-clockwise increase rotation
                 if (this.rotation === 4) {
@@ -189,7 +189,7 @@ class GamePiece {
                 else {
                     this.rotation++;
                 }
-                console.log(this.rotation);
+                console.log(this);
             }
             else if (event.key === "s") { // "S" clockwise decrease rotation
                 if (this.rotation === 1) {
@@ -198,17 +198,17 @@ class GamePiece {
                 else {
                     this.rotation--;
                 }
-                console.log(this.rotation);
+                console.log(this);
             }
             else 
             // MOVE
             if (event.key === "a") { // "A" move left
-                this.currentPosition.x--;
-                console.log(this.currentPosition);
+                //this.currentPosition.x--
+                console.log(this);
             }
             else if (event.key === "d") { // "D" move right
-                this.currentPosition.x++;
-                console.log(this.currentPosition);
+                //this.currentPosition.x++
+                console.log(this);
             }
             this.gameState.currentXPos = this.currentPosition.x;
             this.bluePrint = this.fullGamePiece[this.rotation];
@@ -439,7 +439,7 @@ window.addEventListener('DOMLoaded', () => {
     GameBoard.update();
     console.log(GameBoard.currentPiece);
     if (GameBoard.currentPiece) {
-        window.addEventListener("keydown", GameBoard.currentPiece.control);
+        window.addEventListener("keydown", GameBoard.currentPiece.control.bind(GameBoard.currentPiece));
     }
 });
 GameBoard.update();

@@ -12,3 +12,5 @@
     c) within the findIndex callback function, if it would return true, add the value to an array and run indices with the value of the previous return value to add to the value array  
 
 # the event listener for the gamepiece controller isn't working, kittee is awake, so i need to stop the game
+
+# Learn more about bind to fix the event listener for the gamepiece controller
