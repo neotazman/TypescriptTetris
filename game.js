@@ -2,6 +2,10 @@
 ///// Typescript tetris
 const theBoard = document.createElement('table');
 theBoard.id = 'gameBoard';
+function isOnBoard(board, piece) {
+    let cellPositions = piece ? piece.cells : null;
+    return (board.currentXPos >= 0 && board.currentXPos <= board.gameBoard[0].length - 5 && board.currentYPos >= 0 && board.currentYPos <= board.gameBoard.length - 5);
+}
 //IT TOOK A WHILE FOR ME TO REALIZE, BUT I NEED THIS FOR THE GAME TO WORK
 class GameModel {
     constructor() {
@@ -118,6 +122,9 @@ class GameModel {
         }
         else {
             this.newGameBoard(this.xCells, this.yCells);
+            if (GameBoard.currentPiece) {
+                window.addEventListener("keydown", this.currentPiece.control);
+            }
             this.currentPiece.draw();
             this.levelInterval();
             // this.currentPiece!.currentPosition[0]++ // i want to call update on the keydown event listener and i don't want the piece to fall when i do that
@@ -172,8 +179,8 @@ class GamePiece {
         }
     }
     control(event) {
-        console.log(event);
-        if (event.key !== "w" || "s" || "a" || "d") {
+        if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d") {
+            console.log(event);
             // ROTATE
             if (event.key === "w") { // "W" counter-clockwise increase rotation
                 if (this.rotation === 4) {

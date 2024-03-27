@@ -36,6 +36,14 @@ interface GameState { // so the gamestate doesn't get fucked up
     interval: number
 }
 
+
+function isOnBoard(board: GameState, piece?: GamePiece): boolean {
+    let cellPositions = piece ? piece.cells : null
+    return (
+        board.currentXPos >= 0 && board.currentXPos <= board.gameBoard[0].length - 5 && board.currentYPos >= 0 && board.currentYPos <= board.gameBoard.length - 5
+    )
+}
+
 //IT TOOK A WHILE FOR ME TO REALIZE, BUT I NEED THIS FOR THE GAME TO WORK
 class GameModel {
     gameBoard: BoardRect
@@ -156,18 +164,15 @@ class GameModel {
         this.movingPiece = true
         this.currentPiece.draw()
     }
-    isOnBoard(piece?: GamePiece): boolean {
-        let cellPositions = piece ? piece.cells : null
-        return (
-            this.currentXPos >= 0 && this.currentXPos <= this.gameBoard[0].length - 5 && this.currentYPos >= 0 && this.currentYPos <= this.gameBoard.length - 5
-        )
-    }
     update(): void {
         if(!this.currentPiece) {
             this.addGamePiece(this.randomGamePiece())
             this.update()// is this working?
         } else {
             this.newGameBoard(this.xCells, this.yCells)
+            if(GameBoard.currentPiece) {
+                window.addEventListener("keydown", this.currentPiece.control)
+            }
             this.currentPiece.draw()
             this.levelInterval()
             // this.currentPiece!.currentPosition[0]++ // i want to call update on the keydown event listener and i don't want the piece to fall when i do that
@@ -218,7 +223,6 @@ class GamePiece {
         return fourCells
     }
     draw(x?: number, y?: number) : void {
-        if(this.gameState.isOnBoard(this))
         if (this.gameState.currentPiece === this) {
             this.currentPosition = {
                 x: this.gameState.currentXPos,
@@ -236,8 +240,8 @@ class GamePiece {
         }
     }
     control(event: KeyboardEvent): void {
-        console.log(event)
-        if(event.key !== "w" || "s" || "a" || "d"){
+        if(event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d"){
+            console.log(event)
             // ROTATE
             if(event.key === "w") { // "W" counter-clockwise increase rotation
                 if(this.rotation === 4) {
