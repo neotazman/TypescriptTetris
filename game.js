@@ -204,7 +204,7 @@ class GamePiece {
             // MOVE
             if (event.key === "a") { // "A" move left
                 //this.currentPosition.x--
-                console.log(this);
+                console.log(this.document.all.gameBoard);
             }
             else if (event.key === "d") { // "D" move right
                 //this.currentPosition.x++
@@ -215,6 +215,9 @@ class GamePiece {
             this.draw();
             return;
         }
+    }
+    thisControl() {
+        return this.control.bind(this);
     }
 }
 // TETRIS SHAPES -- takes one argument "gamestate", the rest of the subclass is the argument for the superclass

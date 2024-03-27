@@ -274,6 +274,9 @@ class GamePiece {
             return
         }
     }
+    thisControl() {
+        return this.control.bind(this)
+    }
 }
 
 // TETRIS SHAPES -- takes one argument "gamestate", the rest of the subclass is the argument for the superclass
