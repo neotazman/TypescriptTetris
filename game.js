@@ -123,7 +123,7 @@ class GameModel {
         else {
             this.newGameBoard(this.xCells, this.yCells);
             if (GameBoard.currentPiece) {
-                window.addEventListener("keydown", this.currentPiece.control);
+                window.addEventListener("keydown", control);
             }
             this.currentPiece.draw();
             this.levelInterval();
@@ -177,47 +177,6 @@ class GamePiece {
                 }
             }
         }
-    }
-    control(event) {
-        if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d") {
-            // console.log(event)
-            // ROTATE
-            if (event.key === "w") { // "W" counter-clockwise increase rotation
-                if (this.rotation === 4) {
-                    this.rotation = 1;
-                }
-                else {
-                    this.rotation++;
-                }
-                console.log(this);
-            }
-            else if (event.key === "s") { // "S" clockwise decrease rotation
-                if (this.rotation === 1) {
-                    this.rotation = 4;
-                }
-                else {
-                    this.rotation--;
-                }
-                console.log(this);
-            }
-            else 
-            // MOVE
-            if (event.key === "a") { // "A" move left
-                //this.currentPosition.x--
-                console.log(this.document.all.gameBoard);
-            }
-            else if (event.key === "d") { // "D" move right
-                //this.currentPosition.x++
-                console.log(this);
-            }
-            this.gameState.currentXPos = this.currentPosition.x;
-            this.bluePrint = this.fullGamePiece[this.rotation];
-            this.draw();
-            return;
-        }
-    }
-    thisControl() {
-        return this.control.bind(this);
     }
 }
 // TETRIS SHAPES -- takes one argument "gamestate", the rest of the subclass is the argument for the superclass
@@ -442,10 +401,50 @@ window.addEventListener('DOMLoaded', () => {
     GameBoard.update();
     console.log(GameBoard.currentPiece);
     if (GameBoard.currentPiece) {
-        window.addEventListener("keydown", GameBoard.currentPiece.control.bind(GameBoard.currentPiece));
+        window.addEventListener("keydown", control);
     }
 });
 GameBoard.update();
+function control(event) {
+    if (!GameBoard.currentPiece)
+        return;
+    if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d") {
+        // console.log(event)
+        // ROTATE
+        if (event.key === "w") { // "W" counter-clockwise increase rotation
+            if (GameBoard.currentPiece.rotation === 4) {
+                GameBoard.currentPiece.rotation = 1;
+            }
+            else {
+                GameBoard.currentPiece.rotation++;
+            }
+            console.log(GameBoard.currentPiece);
+        }
+        else if (event.key === "s") { // "S" clockwise decrease rotation
+            if (GameBoard.currentPiece.rotation === 1) {
+                GameBoard.currentPiece.rotation = 4;
+            }
+            else {
+                GameBoard.currentPiece.rotation--;
+            }
+            console.log(GameBoard.currentPiece);
+        }
+        else 
+        // MOVE
+        if (event.key === "a") { // "A" move left
+            GameBoard.currentPiece.currentPosition.x--;
+            console.log(GameBoard.currentPiece);
+        }
+        else if (event.key === "d") { // "D" move right
+            GameBoard.currentPiece.currentPosition.x++;
+            console.log(GameBoard.currentPiece);
+        }
+        GameBoard.currentXPos = GameBoard.currentPiece.currentPosition.x;
+        GameBoard.currentPiece.bluePrint = GameBoard.currentPiece.fullGamePiece[GameBoard.currentPiece.rotation];
+        GameBoard.currentPiece.draw();
+        return;
+    }
+}
 let runGame = setInterval(() => {
     if (GameBoard.gameOver) {
         clearInterval(runGame);
