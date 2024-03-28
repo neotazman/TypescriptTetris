@@ -14,5 +14,10 @@
 # the event listener for the gamepiece controller isn't working, kittee is awake, so i need to stop the game
     a) take the controller out of the gamepiece class -- idk how to make it refer to the gamepiece yet
 
-# Learn more about bind to fix the event listener for the gamepiece controller
-    typescript doesn't throw an error when i write the code with this being the gamepiece object, but chrome says this is the window element, but when i retype the function with this referring to the window, typescript throws an error saying that this is referring to the gamepiece object and not the window, so i can't even run the code because chrome changes this and typescript doesn't let me write code with this referring to the window
+<!-- # Learn more about bind to fix the event listener for the gamepiece controller
+    typescript doesn't throw an error when i write the code with this being the gamepiece object, but chrome says this is the window element, but when i retype the function with this referring to the window, typescript throws an error saying that this is referring to the gamepiece object and not the window, so i can't even run the code because chrome changes this and typescript doesn't let me write code with this referring to the window --> FIXED
+
+# trying to figure out code for gamepieces that have stopped
+    a) the board gets cleared before the gamepiece is drawn on. might need to create an array of the 2 positions to add to the board before it's built (or as it's built)
+        1) check the cell position values so they won't be overwritten
+        2) check every line for all 2s and delete them and add a new line to the front of the array. (? .unshift (? and increase the score

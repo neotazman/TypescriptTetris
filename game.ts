@@ -33,14 +33,15 @@ interface GameState { // so the gamestate doesn't get fucked up
     currentXPos: number
     yCells: number
     currentYPos: number
+    previousYPos: number
     interval: number
 }
 
 
-function isOnBoard(board: GameState, piece?: GamePiece): boolean {
+function isOnBoard(board: GameState, piece: GamePiece): boolean {
     let cellPositions = piece ? piece.cells : null
     return (
-        board.currentXPos >= 0 && board.currentXPos <= board.gameBoard[0].length - 5 && board.currentYPos >= 0 && board.currentYPos <= board.gameBoard.length - 5
+        piece.currentPosition.x >= 0 && piece.currentPosition.x <= board.gameBoard[0].length - 5 && piece.currentPosition.y >= 0 && piece.currentPosition.y <= board.gameBoard.length - 5
     )
 }
 
@@ -57,6 +58,7 @@ class GameModel {
     currentXPos: number
     yCells: number
     currentYPos: number
+    previousYPos: number
     interval: number
     constructor() {
         this.gameBoard = [ 
@@ -96,6 +98,7 @@ class GameModel {
         // this.currentPiece if the property is optional i shouldn't instantiate it until the update function is called
         this.yCells = this.gameBoard.length
         this.currentYPos = 0
+        this.previousYPos = 0
         this.interval = 1000
     }
     newGameBoard(x: number, y: number): void {
@@ -135,7 +138,7 @@ class GameModel {
         this.interval = this.interval * 0.9 ^ this.level
         // console.log(this.interval)
     }
-    randomGamePiece(): GamePiece { // this function will always return a random GamePiece, but since all the return statements are inside if statements, typescript thinks it could return nothing
+    randomGamePiece(): GamePiece { // this function will always return a random GamePiece, but since all the return statements are inside if statements, typescript thinks it could not return anything
         let random: number = Math.ceil(Math.random() * 7)
         if(random === 1) {
             return new GamePiece1(this)
@@ -228,6 +231,10 @@ class GamePiece {
                 x: this.gameState.currentXPos,
                 y: this.gameState.currentYPos,
             }
+            if(!isOnBoard(this.gameState, this)) {
+
+            }
+            let stop = false
             for (let cell of this.cells) {
                 let dy = cell[0]
                 let dx = cell[1]
@@ -235,6 +242,13 @@ class GamePiece {
                 let exactX = this.currentPosition.x + dx
                 if(this.gameState.gameBoard[exactY][exactX] !== 2) {
                     this.gameState.gameBoard[exactY][exactX] = 1
+                } else {
+                    stop = true
+                }
+            }
+            if(stop) {
+                for(let cell of this.cells) {
+
                 }
             }
         }
@@ -472,7 +486,7 @@ window.addEventListener('DOMLoaded', () => { // this is my first typescript game
 GameBoard.update()
 
 
- function control(event: KeyboardEvent): void {
+function control(event: KeyboardEvent): void {
     if(!GameBoard.currentPiece) return
     if(event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d"){
         // console.log(event)
@@ -505,6 +519,7 @@ GameBoard.update()
         GameBoard.currentXPos = GameBoard.currentPiece.currentPosition.x
         GameBoard.currentPiece.bluePrint = GameBoard.currentPiece.fullGamePiece[GameBoard.currentPiece.rotation]
         GameBoard.currentPiece.draw()
+        GameBoard.update()
         return
     }
 }
@@ -516,6 +531,7 @@ let runGame = setInterval(() => {
     } else {
         GameBoard.update()
         if(GameBoard.movingPiece) {
+            GameBoard.previousYPos = GameBoard.currentYPos
             GameBoard.currentYPos++
         }
         GameBoard.level++
