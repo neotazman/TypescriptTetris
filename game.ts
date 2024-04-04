@@ -228,7 +228,6 @@ class GamePiece {
     control(event: KeyboardEvent): void {
         if(!GameBoard.currentPiece) return
         if(event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d" || event.key === "k"){
-            // console.log(event)
             // ROTATE
             if(event.key === "w") { // "W" counter-clockwise increase rotation
                 if(this.rotation === 4) {
@@ -236,8 +235,6 @@ class GamePiece {
                 } else {
                     this.rotation++
                 }
-                //this.bluePrint = this.fullGamePiece[3] // won't work right
-                // console.log(this)
             } else 
             if(event.key === "s") { // "S" clockwise decrease rotation
                 if(this.rotation === 1) {
@@ -245,16 +242,13 @@ class GamePiece {
                 } else {
                     this.rotation--
                 }
-                // console.log(this)
             } else 
             // MOVE
             if(event.key === "a") { // "A" move left
                 this.currentPosition.x--
-                // console.log(this)
             } else 
             if(event.key === "d") { // "D" move right
                 this.currentPosition.x++
-                // console.log(this)
             } 
             // check the time for debuggin purposes
             if(event.key === "k") {
@@ -279,7 +273,6 @@ class GamePiece {
             }
             let stop = false
             for (let cell of this.cells) {
-                // console.log(this.bluePrint)
                 let dy = cell[0]
                 let dx = cell[1]
                 let exactY = this.currentPosition.y + dy

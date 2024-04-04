@@ -1,7 +1,5 @@
 # This is a tetris game that I'm building as my first typescript project
 
-# the width and height of the gamepieces will reflect each specific piece
-
 # trying to add the gamestate as a parameter for the gamepiece class, still need to adjust it
     a) put the gamestate parameter on each of the subclasses
     b) the rest of the subclass is the argument for the superclass
@@ -15,10 +13,9 @@
     b) move the inner code of control, make it a method on gamepiece and set event as a parameter -- IT WORKED
     c) i wasn't able to figure out why the piece wouldn't rotate, but it was because i needed to reset the blueprint AND the cells
 
-<!-- # Learn more about bind to fix the event listener for the gamepiece controller
-    typescript doesn't throw an error when i write the code with this being the gamepiece object, but chrome says this is the window element, but when i retype the function with this referring to the window, typescript throws an error saying that this is referring to the gamepiece object and not the window, so i can't even run the code because chrome changes this and typescript doesn't let me write code with this referring to the window --> FIXED
-
 # trying to figure out code for gamepieces that have stopped
     a) the board gets cleared before the gamepiece is drawn on. might need to create an array of the 2 positions to add to the board before it's built (or as it's built)
         1) check the cell position values so they won't be overwritten
         2) check every line for all 2s and delete them and add a new line to the front of the array. (? .unshift (? and increase the score
+
+# any methods in the classes can't be called before it creates the object, but the gamepiece can refer to the GameBoard object because the first gamepiece isn't created until after the gameboard is created
