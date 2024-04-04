@@ -13,6 +13,7 @@
 
 # the event listener for the gamepiece controller isn't working, kittee is awake, so i need to stop the game
     a) take the controller out of the gamepiece class -- idk how to make it refer to the gamepiece yet
+    b) move the inner code of control, make it a method on gamepiece and set event as a parameter
 
 <!-- # Learn more about bind to fix the event listener for the gamepiece controller
     typescript doesn't throw an error when i write the code with this being the gamepiece object, but chrome says this is the window element, but when i retype the function with this referring to the window, typescript throws an error saying that this is referring to the gamepiece object and not the window, so i can't even run the code because chrome changes this and typescript doesn't let me write code with this referring to the window --> FIXED

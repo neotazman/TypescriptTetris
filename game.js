@@ -419,7 +419,7 @@ GameBoard.update();
 function control(event) {
     if (!GameBoard.currentPiece)
         return;
-    if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d") {
+    if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d" || event.key === "k") {
         // console.log(event)
         // ROTATE
         if (event.key === "w") { // "W" counter-clockwise increase rotation
@@ -429,6 +429,7 @@ function control(event) {
             else {
                 GameBoard.currentPiece.rotation++;
             }
+            GameBoard.currentPiece.bluePrint = GameBoard.currentPiece.fullGamePiece[3]; // won't work right
             console.log(GameBoard.currentPiece);
         }
         else if (event.key === "s") { // "S" clockwise decrease rotation
@@ -450,6 +451,10 @@ function control(event) {
             GameBoard.currentPiece.currentPosition.x++;
             console.log(GameBoard.currentPiece);
         }
+        // check the time for debuggin purposes
+        if (event.key === "k") {
+            console.log(gameTime);
+        }
         GameBoard.currentXPos = GameBoard.currentPiece.currentPosition.x;
         GameBoard.currentPiece.bluePrint = GameBoard.currentPiece.fullGamePiece[GameBoard.currentPiece.rotation];
         GameBoard.currentPiece.draw();
@@ -457,6 +462,7 @@ function control(event) {
         return;
     }
 }
+let gameTime = 0;
 let runGame = setInterval(() => {
     if (GameBoard.gameOver) {
         clearInterval(runGame);
@@ -464,6 +470,7 @@ let runGame = setInterval(() => {
     }
     else {
         GameBoard.update();
+        gameTime++;
         if (GameBoard.movingPiece) {
             GameBoard.previousYPos = GameBoard.currentYPos;
             GameBoard.currentYPos++;
