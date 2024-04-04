@@ -227,7 +227,7 @@ class GamePiece {
     }
     control(event: KeyboardEvent): void {
         if(!GameBoard.currentPiece) return
-        if(event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d" || event.key === "k"){
+        if(event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d" || event.key === "k" || event.key === "m"){
             // ROTATE
             if(event.key === "w") { // "W" counter-clockwise increase rotation
                 if(this.rotation === 4) {
@@ -249,10 +249,13 @@ class GamePiece {
             } else 
             if(event.key === "d") { // "D" move right
                 this.currentPosition.x++
-            } 
+            } else
             // check the time for debuggin purposes
             if(event.key === "k") {
                 console.log(gameTime)
+            } else
+            if(event.key === "m") {
+                this.gameState.currentYPos++
             }
             GameBoard.currentXPos = this.currentPosition.x
             this.bluePrint = this.fullGamePiece[this.rotation]

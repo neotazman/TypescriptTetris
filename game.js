@@ -165,8 +165,7 @@ class GamePiece {
     control(event) {
         if (!GameBoard.currentPiece)
             return;
-        if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d" || event.key === "k") {
-            // console.log(event)
+        if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d" || event.key === "k" || event.key === "m") {
             // ROTATE
             if (event.key === "w") { // "W" counter-clockwise increase rotation
                 if (this.rotation === 4) {
@@ -175,8 +174,6 @@ class GamePiece {
                 else {
                     this.rotation++;
                 }
-                //this.bluePrint = this.fullGamePiece[3] // won't work right
-                // console.log(this)
             }
             else if (event.key === "s") { // "S" clockwise decrease rotation
                 if (this.rotation === 1) {
@@ -185,21 +182,22 @@ class GamePiece {
                 else {
                     this.rotation--;
                 }
-                // console.log(this)
             }
             else 
             // MOVE
             if (event.key === "a") { // "A" move left
                 this.currentPosition.x--;
-                // console.log(this)
             }
             else if (event.key === "d") { // "D" move right
                 this.currentPosition.x++;
-                // console.log(this)
             }
+            else 
             // check the time for debuggin purposes
             if (event.key === "k") {
                 console.log(gameTime);
+            }
+            else if (event.key === "m") {
+                this.gameState.currentYPos++;
             }
             GameBoard.currentXPos = this.currentPosition.x;
             this.bluePrint = this.fullGamePiece[this.rotation];
@@ -219,7 +217,6 @@ class GamePiece {
             }
             let stop = false;
             for (let cell of this.cells) {
-                // console.log(this.bluePrint)
                 let dy = cell[0];
                 let dx = cell[1];
                 let exactY = this.currentPosition.y + dy;
