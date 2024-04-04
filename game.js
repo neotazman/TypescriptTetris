@@ -124,7 +124,7 @@ class GameModel {
         else {
             this.newGameBoard(this.xCells, this.yCells);
             if (GameBoard.currentPiece) {
-                window.addEventListener("keydown", control);
+                window.addEventListener("keydown", controlGame);
             }
             this.currentPiece.draw();
             this.levelInterval();
@@ -162,6 +162,53 @@ class GamePiece {
         }
         return fourCells;
     }
+    control(event) {
+        if (!GameBoard.currentPiece)
+            return;
+        if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d" || event.key === "k") {
+            // console.log(event)
+            // ROTATE
+            if (event.key === "w") { // "W" counter-clockwise increase rotation
+                if (this.rotation === 4) {
+                    this.rotation = 1;
+                }
+                else {
+                    this.rotation++;
+                }
+                //this.bluePrint = this.fullGamePiece[3] // won't work right
+                // console.log(this)
+            }
+            else if (event.key === "s") { // "S" clockwise decrease rotation
+                if (this.rotation === 1) {
+                    this.rotation = 4;
+                }
+                else {
+                    this.rotation--;
+                }
+                // console.log(this)
+            }
+            else 
+            // MOVE
+            if (event.key === "a") { // "A" move left
+                this.currentPosition.x--;
+                // console.log(this)
+            }
+            else if (event.key === "d") { // "D" move right
+                this.currentPosition.x++;
+                // console.log(this)
+            }
+            // check the time for debuggin purposes
+            if (event.key === "k") {
+                console.log(gameTime);
+            }
+            GameBoard.currentXPos = this.currentPosition.x;
+            this.bluePrint = this.fullGamePiece[this.rotation];
+            this.cells = this.findCellPositions(this.bluePrint);
+            this.draw();
+            GameBoard.update();
+            return;
+        }
+    }
     draw(x, y) {
         if (this.gameState.currentPiece === this) {
             this.currentPosition = {
@@ -172,6 +219,7 @@ class GamePiece {
             }
             let stop = false;
             for (let cell of this.cells) {
+                // console.log(this.bluePrint)
                 let dy = cell[0];
                 let dx = cell[1];
                 let exactY = this.currentPosition.y + dy;
@@ -412,55 +460,14 @@ window.addEventListener('DOMLoaded', () => {
     GameBoard.update();
     console.log(GameBoard.currentPiece);
     if (GameBoard.currentPiece) {
-        window.addEventListener("keydown", control);
+        window.addEventListener("keydown", controlGame);
     }
 });
 GameBoard.update();
-function control(event) {
+function controlGame(event) {
     if (!GameBoard.currentPiece)
         return;
-    if (event.key === "w" || event.key === "s" || event.key === "a" || event.key === "d" || event.key === "k") {
-        // console.log(event)
-        // ROTATE
-        if (event.key === "w") { // "W" counter-clockwise increase rotation
-            if (GameBoard.currentPiece.rotation === 4) {
-                GameBoard.currentPiece.rotation = 1;
-            }
-            else {
-                GameBoard.currentPiece.rotation++;
-            }
-            GameBoard.currentPiece.bluePrint = GameBoard.currentPiece.fullGamePiece[3]; // won't work right
-            console.log(GameBoard.currentPiece);
-        }
-        else if (event.key === "s") { // "S" clockwise decrease rotation
-            if (GameBoard.currentPiece.rotation === 1) {
-                GameBoard.currentPiece.rotation = 4;
-            }
-            else {
-                GameBoard.currentPiece.rotation--;
-            }
-            console.log(GameBoard.currentPiece);
-        }
-        else 
-        // MOVE
-        if (event.key === "a") { // "A" move left
-            GameBoard.currentPiece.currentPosition.x--;
-            console.log(GameBoard.currentPiece);
-        }
-        else if (event.key === "d") { // "D" move right
-            GameBoard.currentPiece.currentPosition.x++;
-            console.log(GameBoard.currentPiece);
-        }
-        // check the time for debuggin purposes
-        if (event.key === "k") {
-            console.log(gameTime);
-        }
-        GameBoard.currentXPos = GameBoard.currentPiece.currentPosition.x;
-        GameBoard.currentPiece.bluePrint = GameBoard.currentPiece.fullGamePiece[GameBoard.currentPiece.rotation];
-        GameBoard.currentPiece.draw();
-        GameBoard.update();
-        return;
-    }
+    GameBoard.currentPiece.control(event);
 }
 let gameTime = 0;
 let runGame = setInterval(() => {
