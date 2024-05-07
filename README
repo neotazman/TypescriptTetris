@@ -9,13 +9,18 @@
     b) add the return 
     c) within the findIndex callback function, if it would return true, add the value to an array and run indices with the value of the previous return value to add to the value array  
 
-# the event listener for the gamepiece controller isn't working, kittee is awake, so i need to stop the game
+# the event listener for the gamepiece controller
     b) move the inner code of control, make it a method on gamepiece and set event as a parameter -- IT WORKED
     c) i wasn't able to figure out why the piece wouldn't rotate, but it was because i needed to reset the blueprint AND the cells
 
 # trying to figure out code for gamepieces that have stopped
+
     a) the board gets cleared before the gamepiece is drawn on. might need to create an array of the 2 positions to add to the board before it's built (or as it's built)
         1) check the cell position values so they won't be overwritten
         2) check every line for all 2s and delete them and add a new line to the front of the array. (? .unshift (? and increase the score
 
 # any methods in the classes can't be called before it creates the object, but the gamepiece can refer to the GameBoard object because the first gamepiece isn't created until after the gameboard is created
+
+# added the m key to make the piece fall -- it's in the first stage so it can break the game
+
+# screwing with the level/interval

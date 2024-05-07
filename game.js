@@ -37,7 +37,7 @@ class GameModel {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
         this.gameOver = false;
-        this.level = 1;
+        this.level = 111;
         this.score = 0;
         this.xCells = this.gameBoard[0].length;
         this.gamePieceDroppingPosition = Math.floor(this.xCells / 2);
@@ -47,6 +47,7 @@ class GameModel {
         this.yCells = this.gameBoard.length;
         this.currentYPos = 0;
         this.previousYPos = 0;
+        this.frozenCells = [];
         this.interval = 1000;
     }
     newGameBoard(x, y) {
@@ -68,15 +69,15 @@ class GameModel {
             thisRow.className = `row ${row}`;
             for (let col = 0; col < currentRow.length; col++) {
                 let falling = '';
-                let fallen = '';
+                let filled = '';
                 if (currentRow[col] === 1) { // adds the className falling when it's falling
-                    falling += ' filled';
+                    falling += ' falling';
                 }
                 else if (currentRow[col] === 2) { // adds the className falling when it's falling'}
-                    fallen += ' fallen';
+                    filled += ' filled';
                 }
                 let currentCell = document.createElement('td');
-                currentCell.className = `cell ${col}${falling}${fallen}`; // if the cell is empty the "filled" value is an empty string
+                currentCell.className = `cell ${col}${falling}${filled}`; // if the cell is empty the "filled" value is an empty string
                 thisRow.append(currentCell);
             }
             theBoard.append(thisRow);
@@ -84,7 +85,7 @@ class GameModel {
         document.body.append(theBoard);
     }
     levelInterval() {
-        this.interval = this.interval * 0.9 ^ this.level;
+        this.interval = this.interval * (0.9 ^ this.level);
         // console.log(this.interval)
     }
     randomGamePiece() {
@@ -223,6 +224,9 @@ class GamePiece {
                 let exactX = this.currentPosition.x + dx;
                 if (this.gameState.gameBoard[exactY][exactX] !== 2) {
                     this.gameState.gameBoard[exactY][exactX] = 1;
+                }
+                else if (!this.gameState.gameBoard[exactY][exactX]) { // to add the ones as twos
+                    stop = true; // will finish later -- only here so we don't break the code
                 }
                 else {
                     stop = true;
@@ -455,7 +459,7 @@ let GameBoard = new GameModel(); // even though i create a new game model in DOM
 window.addEventListener('DOMLoaded', () => {
     GameBoard = new GameModel();
     GameBoard.update();
-    console.log(GameBoard.currentPiece);
+    console.log(GameBoard.interval);
     if (GameBoard.currentPiece) {
         window.addEventListener("keydown", controlGame);
     }
@@ -467,6 +471,7 @@ function controlGame(event) {
     GameBoard.currentPiece.control(event);
 }
 let gameTime = 0;
+let gameInterval = 1;
 let runGame = setInterval(() => {
     if (GameBoard.gameOver) {
         clearInterval(runGame);
@@ -474,6 +479,7 @@ let runGame = setInterval(() => {
     }
     else {
         GameBoard.update();
+        gameInterval = GameBoard.interval;
         gameTime++;
         if (GameBoard.movingPiece) {
             GameBoard.previousYPos = GameBoard.currentYPos;
@@ -484,5 +490,5 @@ let runGame = setInterval(() => {
             GameBoard.gameOver = true;
         }
     }
-}, GameBoard.interval);
+}, gameInterval);
 // GameBoard.update()

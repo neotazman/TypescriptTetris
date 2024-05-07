@@ -4,7 +4,7 @@ const theBoard = document.createElement('table')
 theBoard.id = 'gameBoard'
 
 ///// custom types. primarily for values and/or parameters
-type CellValue = 0 | 1 | 2// CHANGE THIS WHEN TETROMINOS ARE CREATED this is just to show that the cells are either filled or empty
+type CellValue = 0 | 1 | 2 //  this is just to show that the cells are either filled or empty
 type BoardRect = number[][] // not a cell but a square of any number of cells
 type Tetromino = [ // the rectangle that the game piece can take up
     [CellValue, CellValue, CellValue, CellValue],
@@ -34,6 +34,7 @@ interface GameState { // so the gamestate doesn't get fucked up
     yCells: number
     currentYPos: number
     previousYPos: number
+    frozenCells: CellPosition[]
     interval: number
 }
 
@@ -59,6 +60,7 @@ class GameModel {
     yCells: number
     currentYPos: number
     previousYPos: number
+    frozenCells: CellPosition[]
     interval: number
     constructor() {
         this.gameBoard = [ 
@@ -89,7 +91,7 @@ class GameModel {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ]
         this.gameOver = false
-        this.level = 1
+        this.level = 111
         this.score = 0
         this.xCells = this.gameBoard[0].length
         this.gamePieceDroppingPosition = Math.floor(this.xCells / 2)
@@ -99,6 +101,7 @@ class GameModel {
         this.yCells = this.gameBoard.length
         this.currentYPos = 0
         this.previousYPos = 0
+        this.frozenCells = []
         this.interval = 1000
     }
     newGameBoard(x: number, y: number): void {
@@ -120,14 +123,14 @@ class GameModel {
             thisRow.className = `row ${row}`
             for(let col = 0; col < currentRow.length; col++) {
                 let falling = ''
-                let fallen = ''
+                let filled = ''
                 if(currentRow[col] === 1) { // adds the className falling when it's falling
-                    falling+= ' filled'
+                    falling+= ' falling'
                 } else if(currentRow[col] === 2) { // adds the className falling when it's falling'}
-                    fallen+= ' fallen'
+                    filled+= ' filled'
                 }
                 let currentCell = document.createElement('td')
-                currentCell.className = `cell ${col}${falling}${fallen}` // if the cell is empty the "filled" value is an empty string
+                currentCell.className = `cell ${col}${falling}${filled}` // if the cell is empty the "filled" value is an empty string
                 thisRow.append(currentCell)
             }
             theBoard.append(thisRow)
@@ -135,7 +138,7 @@ class GameModel {
         document.body.append(theBoard)
     }
     levelInterval(): void {
-        this.interval = this.interval * 0.9 ^ this.level
+        this.interval = 1000 * (0.9 ^ this.level) 
         // console.log(this.interval)
     }
     randomGamePiece(): GamePiece { // this function will always return a random GamePiece, but since all the return statements are inside if statements, typescript thinks it could not return anything
@@ -282,11 +285,13 @@ class GamePiece {
                 let exactX = this.currentPosition.x + dx
                 if(this.gameState.gameBoard[exactY][exactX] !== 2) {
                     this.gameState.gameBoard[exactY][exactX] = 1
+                } else if(!this.gameState.gameBoard[exactY][exactX]) {// to add the ones as twos
+                    stop = true // will finish later -- only here so we don't break the code
                 } else {
                     stop = true
                 }
             }
-            if(stop) {
+            if(stop) { 
                 for(let cell of this.cells) {
 
                 }
@@ -518,7 +523,7 @@ let GameBoard = new GameModel() // even though i create a new game model in DOML
 window.addEventListener('DOMLoaded', () => { // this is my first typescript game. i never understood why you need a DOMLoaded event listener if you instantiate the code after it is created, but now i realize that javascript being loosely typed makes it so it doesn't check if a function works before you call it, so i need to make a new GameModel as soon as the page loads so it doesn't read the code until after it's instantied
     GameBoard = new GameModel()
     GameBoard.update()
-    console.log(GameBoard.currentPiece)
+    console.log(GameBoard.interval)
     if(GameBoard.currentPiece) {
         window.addEventListener("keydown", controlGame)
     }
@@ -531,7 +536,11 @@ function controlGame(event: KeyboardEvent): void { // it worked this way
     GameBoard.currentPiece.control(event)
 }
 
+
+
 let gameTime = 0
+
+let gameInterval = 1
 
 let runGame = setInterval(() => {
     if(GameBoard.gameOver) {
@@ -539,6 +548,7 @@ let runGame = setInterval(() => {
         console.log(GameBoard)
     } else {
         GameBoard.update()
+        gameInterval = GameBoard.interval
         gameTime++
         if(GameBoard.movingPiece) {
             GameBoard.previousYPos = GameBoard.currentYPos
@@ -549,6 +559,6 @@ let runGame = setInterval(() => {
             GameBoard.gameOver = true
         }
     }
-}, GameBoard.interval)
+}, gameInterval)
 
 // GameBoard.update()
