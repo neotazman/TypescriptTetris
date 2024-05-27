@@ -25,4 +25,5 @@
 
 # added the m key to make the piece fall -- it's in the first stage so it can break the game
 
-# screwing with the level/interval -- game speed
+# screwing with the level/interval -- game speed; the math checks out, but i need to change the interval function so that the timer updates -- possibly use this: https://stackoverflow.com/questions/1280263/changing-the-interval-of-setinterval-while-its-running
+
