@@ -91,7 +91,7 @@ class GameModel {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ]
         this.gameOver = false
-        this.level = 111
+        this.level = 1
         this.score = 0
         this.xCells = this.gameBoard[0].length
         this.gamePieceDroppingPosition = Math.floor(this.xCells / 2)
@@ -101,7 +101,7 @@ class GameModel {
         this.yCells = this.gameBoard.length
         this.currentYPos = 0
         this.previousYPos = 0
-        this.frozenCells = []
+        this.frozenCells = [[2, this.yCells - 2]]
         this.interval = 1000
     }
     newGameBoard(x: number, y: number): void {
@@ -110,7 +110,14 @@ class GameModel {
         for(let i = 0; i < y; i++) {
             let currentLine = []
             for(let j = 0; j < x; j++) {
-                currentLine.push(0)
+                let cellValue = 0
+                for(let cell of this.frozenCells) {
+                    let currentCell = [j, i]
+                    if(cell === currentCell) {
+                        cellValue = 2
+                    }
+                }
+                currentLine.push(cellValue)
             }
             this.gameBoard.push(currentLine)
         }
@@ -195,7 +202,7 @@ const StartingGameModel : GameState = new GameModel()
 
 class GamePiece {
     gameState: GameState //| undefined
-    velocity: number
+    // velocity: number // the gamespeed is on the gamestate object so there's no reason to have this in here
     cells: CellPosition[] // [number, number]
     currentPosition: {x: number, y: number}
     fullGamePiece: AllRotations
@@ -205,7 +212,7 @@ class GamePiece {
     constructor(piece: AllRotations, gamestate: GameState) {
         this.fullGamePiece = piece
         this.gameState = gamestate || StartingGameModel
-        this.velocity = this.gameState.level
+        // this.velocity = this.gameState.level
         this.rotation = 1
         this.bluePrint = this.fullGamePiece[this.rotation]
         this.cells = this.findCellPositions(this.bluePrint)
@@ -540,7 +547,7 @@ function controlGame(event: KeyboardEvent): void { // it worked this way
 
 let gameTime = 0
 
-let gameInterval = 1
+let gameInterval = 1000
 
 let runGame = setInterval(() => {
     if(GameBoard.gameOver) {

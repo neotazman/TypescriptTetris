@@ -19,8 +19,10 @@
         1) check the cell position values so they won't be overwritten
         2) check every line for all 2s and delete them and add a new line to the front of the array. (? .unshift (? and increase the score
 
+    b) code for frozen cells is just starting, but not working
+
 # any methods in the classes can't be called before it creates the object, but the gamepiece can refer to the GameBoard object because the first gamepiece isn't created until after the gameboard is created
 
 # added the m key to make the piece fall -- it's in the first stage so it can break the game
 
-# screwing with the level/interval
+# screwing with the level/interval -- game speed
